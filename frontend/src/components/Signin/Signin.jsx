@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./Signin.css";
 
 const API_URL = "http://localhost:5000";
 
@@ -77,57 +76,57 @@ export default function Signin() {
   };
 
   return (
-    <div className="signin-container">
-      {/* Animated background elements */}
-      <div className="bg-blob blob-1"></div>
-      <div className="bg-blob blob-2"></div>
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 p-4 relative overflow-hidden">
+      {/* Decorative background blobs */}
+      <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-8 left-20 w-64 h-64 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
 
-      <div className="signin-wrapper">
-        {/* Card Container */}
-        <div className="signin-card">
-          {/* Header */}
-          <div className="signin-header">
-            <h1>Welcome Back</h1>
-            <p>Sign in to your account</p>
+      <div className="relative w-full max-w-md bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-slate-700">
+        <div className="p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+            <p className="text-slate-400">Sign in to your account</p>
           </div>
 
-          {/* Form */}
-          <div className="signin-form">
-            {/* Email Field */}
-            <div className="form-group">
-              <label>Email Address</label>
-              <div className="input-wrapper">
-                <span className="input-icon">✉️</span>
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  ✉️
+                </span>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@example.com"
-                  className="form-input"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                   disabled={loading}
                 />
               </div>
             </div>
 
-            {/* Password Field */}
-            <div className="form-group">
-              <label>Password</label>
-              <div className="input-wrapper">
-                <span className="input-icon">🔒</span>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  🔒
+                </span>
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className="form-input"
+                  className="w-full pl-10 pr-12 py-3 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                   disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="toggle-password"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
                   disabled={loading}
                 >
                   {showPassword ? "👁️" : "👁️‍🗨️"}
@@ -135,19 +134,21 @@ export default function Signin() {
               </div>
             </div>
 
-            {/* Error Message */}
-            {error && <div className="error-message">{error}</div>}
+            {error && (
+              <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm text-center animate-pulse">
+                {error}
+              </div>
+            )}
 
-            {/* Remember Me & Forgot Password */}
-            <div className="signin-options">
-              <div className="checkbox-group">
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="remember"
-                  className="checkbox-input"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-600 rounded bg-slate-700"
                   disabled={loading}
                 />
-                <label htmlFor="remember" className="checkbox-label">
+                <label htmlFor="remember" className="ml-2 text-slate-400 select-none">
                   Remember me
                 </label>
               </div>
@@ -156,7 +157,6 @@ export default function Signin() {
                 to="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  // Show forgot password modal or navigate
                   const email = prompt("Enter your email:");
                   if (email) {
                     fetch("http://localhost:5000/api/auth/forgot-password", {
@@ -168,36 +168,37 @@ export default function Signin() {
                       .then((data) => alert(data.message));
                   }
                 }}
+                className="text-indigo-400 hover:text-indigo-300 hover:underline"
               >
                 Forgot Password?
               </Link>
             </div>
 
-            {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              className="submit-btn"
+              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
               disabled={loading}
             >
               {loading ? "Signing In..." : "Sign In →"}
             </button>
 
-            {/* Signup Link */}
-            <p className="signup-link">
-              Don't have an account? <Link to="/signup">Create one</Link>
+            <p className="text-center text-slate-400 text-sm mt-4">
+              Don't have an account?{" "}
+              <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 font-medium hover:underline">
+                Create one
+              </Link>
             </p>
           </div>
 
-          {/* Success Message */}
           {submitted && (
-            <div className="success-message">
+            <div className="mt-4 p-3 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 text-sm text-center">
               Signed in successfully! 🎉 Redirecting...
             </div>
           )}
         </div>
-
-        {/* Footer Text */}
-        <p className="footer-text">Your login is secure and encrypted.</p>
+        <div className="px-8 py-4 bg-slate-900/50 text-center border-t border-slate-700">
+          <p className="text-xs text-slate-500">Your login is secure and encrypted.</p>
+        </div>
       </div>
     </div>
   );

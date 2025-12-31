@@ -13,6 +13,14 @@ import sequelize from "./config/database.js";
 import { Op } from "sequelize";  // ✅ MOVED HERE - AFTER sequelize import
 import User from "./models/User.js";
 import Todo from "./models/Todo.js";
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Load .env from parent directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 
 const app = express();
@@ -55,8 +63,8 @@ const transporter = nodemailer.createTransport({
   // Gmail example (enable 2FA + App Password)
   service: 'gmail',
   auth: {
-    user: 'rishab21062002@gmail.com', // ← CHANGE THIS
-    pass: 'this vwck ypfa zwdk'     // ← CHANGE THIS (16-char App Password)
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
   // OR use SendGrid, Mailgun, etc.
   // host: 'smtp.sendgrid.net',
@@ -72,14 +80,14 @@ transporter.verify((error, success) => {
   }
 });
 
-const BASE_URL = 'http://localhost:5173'; // Frontend URL
+const BASE_URL = process.env.BASE_URL || 'http://localhost:5173'; // Frontend URL
 
 // ============================================
 // TOKEN HELPER FUNCTIONS
 // ============================================
 
-const JWT_SECRET = "your-super-secret-jwt-key-12345";
-const JWT_REFRESH_SECRET = "your-super-secret-refresh-key-12345";
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 function generateAccessToken(userId) {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1h" });
@@ -492,7 +500,7 @@ app.use((err, req, res, next) => {
 // DATABASE SYNC & START SERVER
 // ============================================
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 sequelize.sync({ alter: true })
   .then(() => {
