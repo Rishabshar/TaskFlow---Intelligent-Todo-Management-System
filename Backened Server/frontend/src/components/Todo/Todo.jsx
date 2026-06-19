@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDarkMode } from '../../context/DarkModeContext';
-import './Todo.css';
 
 export default function Todo() {
   const navigate = useNavigate();
@@ -36,7 +35,6 @@ export default function Todo() {
   // Add new todo
   const addTodo = () => {
     if (!inputValue.trim()) {
-      alert('Please enter a todo');
       return;
     }
 
@@ -47,7 +45,7 @@ export default function Todo() {
       createdAt: new Date()
     };
 
-    const updatedTodos = [...todos, newTodo];
+    const updatedTodos = [newTodo, ...todos]; // Add to top
     setTodos(updatedTodos);
     saveTodos(updatedTodos);
     setInputValue('');
@@ -105,117 +103,145 @@ export default function Todo() {
   const filteredTodos = getFilteredTodos();
 
   return (
-    <div className="todo-container">
-      {/* Header */}
-      <div className="todo-header">
-        <div className="header-left">
-          <h1>📝 My Todos</h1>
-          <p className="welcome-text">Welcome, {user?.username || 'User'}!</p>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white transition-colors duration-300">
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+          <div>
+            <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600 mb-2">
+              My Tasks
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400">
+              Welcome back, <span className="font-semibold text-indigo-500">{user?.username || 'User'}</span>!
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={toggleDarkMode} 
+              className="p-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-yellow-400 hover:bg-slate-300 dark:hover:bg-slate-700 transition"
+              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            >
+              {isDarkMode ? '☀️' : '🌙'}
+            </button>
+            <button 
+              onClick={handleLogout} 
+              className="px-4 py-2 text-sm font-medium text-red-600 bg-red-100 dark:bg-red-500/10 dark:text-red-400 rounded-lg hover:bg-red-200 dark:hover:bg-red-500/20 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
-        <div className="header-right">
-          <button 
-            onClick={toggleDarkMode} 
-            className="dark-mode-btn"
-            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          >
-            {isDarkMode ? '☀️' : '🌙'}
-          </button>
-          <button onClick={handleLogout} className="logout-btn">
-            Logout
-          </button>
-        </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="todo-wrapper">
-        {/* Statistics */}
-        <div className="stats-container">
-          <div className="stat-card">
-            <div className="stat-number">{totalTodos}</div>
-            <div className="stat-label">Total Tasks</div>
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+            <div className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-1">{totalTodos}</div>
+            <div className="text-sm font-medium text-slate-500 dark:text-slate-400">Total Tasks</div>
           </div>
-          <div className="stat-card">
-            <div className="stat-number">{completedTodos}</div>
-            <div className="stat-label">Completed</div>
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+            <div className="text-3xl font-bold text-green-600 dark:text-green-500 mb-1">{completedTodos}</div>
+            <div className="text-sm font-medium text-slate-500 dark:text-slate-400">Completed</div>
           </div>
-          <div className="stat-card">
-            <div className="stat-number">{pendingTodos}</div>
-            <div className="stat-label">Pending</div>
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
+            <div className="text-3xl font-bold text-orange-600 dark:text-orange-500 mb-1">{pendingTodos}</div>
+            <div className="text-sm font-medium text-slate-500 dark:text-slate-400">Pending</div>
           </div>
         </div>
 
         {/* Input Section */}
-        <div className="input-section">
-          <div className="input-wrapper">
+        <div className="mb-8">
+          <div className="relative flex shadow-md rounded-xl overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
             <input
               type="text"
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Add a new todo... (press Enter)"
-              className="todo-input"
+              placeholder="Add a new task..."
+              className="flex-grow px-6 py-4 bg-transparent outline-none text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-slate-500"
             />
-            <button onClick={addTodo} className="add-btn">
+            <button 
+              onClick={addTodo} 
+              className="px-8 bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-colors"
+            >
               Add
             </button>
           </div>
         </div>
 
-        {/* Filter Buttons */}
-        <div className="filter-section">
-          <button
-            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => setFilter('all')}
-          >
-            All ({todos.length})
-          </button>
-          <button
-            className={`filter-btn ${filter === 'pending' ? 'active' : ''}`}
-            onClick={() => setFilter('pending')}
-          >
-            Pending ({pendingTodos})
-          </button>
-          <button
-            className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
-            onClick={() => setFilter('completed')}
-          >
-            Completed ({completedTodos})
-          </button>
+        {/* Filter Tabs */}
+        <div className="flex bg-slate-200 dark:bg-slate-800 p-1 rounded-lg inline-flex mb-6 text-sm font-medium">
+          {['all', 'pending', 'completed'].map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-4 py-2 rounded-md capitalize transition-all duration-200 ${
+                filter === f 
+                  ? 'bg-white dark:bg-slate-600 text-indigo-600 dark:text-indigo-400 shadow-sm' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+              }`}
+            >
+              {f}
+            </button>
+          ))}
         </div>
 
         {/* Todo List */}
-        <div className="todos-list">
+        <div className="space-y-3">
           {filteredTodos.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-icon">📭</div>
-              <p className="empty-message">
-                {filter === 'all' && 'No todos yet. Create one to get started!'}
-                {filter === 'pending' && 'No pending tasks. You are all caught up!'}
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4 opacity-50">
+                {filter === 'all' ? '📝' : filter === 'pending' ? '🎉' : '📂'}
+              </div>
+              <p className="text-slate-500 dark:text-slate-400 text-lg">
+                {filter === 'all' && 'No tasks yet. Add one above!'}
+                {filter === 'pending' && 'No pending tasks. Great job!'}
                 {filter === 'completed' && 'No completed tasks yet.'}
               </p>
             </div>
           ) : (
             filteredTodos.map(todo => (
-              <div key={todo.id} className="todo-item">
-                <div className="todo-checkbox-wrapper">
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => toggleTodo(todo.id)}
-                    className="todo-checkbox"
-                  />
+              <div 
+                key={todo.id} 
+                className={`group flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border transition-all duration-200 ${
+                  todo.completed 
+                    ? 'border-slate-100 dark:border-slate-700 opacity-75' 
+                    : 'border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-700 shadow-sm hover:shadow-md'
+                }`}
+              >
+                <div className="flex items-center gap-4 flex-grow">
+                  <button
+                    onClick={() => toggleTodo(todo.id)}
+                    className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${
+                      todo.completed
+                        ? 'bg-green-500 border-green-500 text-white'
+                        : 'border-slate-300 dark:border-slate-500 hover:border-indigo-500 dark:hover:border-indigo-400'
+                    }`}
+                  >
+                    {todo.completed && <span className="text-xs">✓</span>}
+                  </button>
+                  
+                  <div className="flex-grow">
+                    <p className={`text-lg transition-all ${
+                      todo.completed 
+                        ? 'text-slate-400 dark:text-slate-500 line-through decoration-slate-400' 
+                        : 'text-slate-800 dark:text-slate-200'
+                    }`}>
+                      {todo.text}
+                    </p>
+                    <p className="text-xs text-slate-400 mt-1">
+                      {new Date(todo.createdAt).toLocaleDateString(undefined, {
+                        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
                 </div>
-                <div className="todo-text-wrapper">
-                  <p className={`todo-text ${todo.completed ? 'completed' : ''}`}>
-                    {todo.text}
-                  </p>
-                  <span className="todo-date">
-                    {new Date(todo.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
+
                 <button
                   onClick={() => deleteTodo(todo.id)}
-                  className="delete-btn"
+                  className="p-2 text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                  title="Delete task"
                 >
                   🗑️
                 </button>
@@ -223,6 +249,7 @@ export default function Todo() {
             ))
           )}
         </div>
+
       </div>
     </div>
   );

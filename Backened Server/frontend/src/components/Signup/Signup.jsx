@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Signup.css';
 
 // Base URL for the backend API
 const API_URL = 'http://localhost:5000';
@@ -43,12 +42,12 @@ export default function Signup() {
     // Handle checkbox change specifically
     if (type === 'checkbox') {
         setFormData({
-            ...formData,
+             ...formData,
             [name]: checked
         });
     } else {
         setFormData({
-            ...formData,
+             ...formData,
             [name]: value
         });
     }
@@ -177,167 +176,175 @@ export default function Signup() {
 
 
   return (
-    <div className="signup-container">
-      {/* Animated background elements */}
-      <div className="bg-blob blob-1"></div>
-      <div className="bg-blob blob-2"></div>
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 p-4 relative overflow-hidden">
+      {/* Decorative background blobs */}
+      <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+      <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
 
-      <div className="signup-wrapper">
-        {/* Card Container */}
-        <div className="signup-card">
-          
-          {/* Header */}
-          <div className="signup-header">
-            <h1>Join Us</h1>
-            <p>Create your account and get started today</p>
+      <div className="relative w-full max-w-md bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-slate-700">
+        <div className="p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-white mb-2">Join Us</h1>
+            <p className="text-slate-400">Create your account and get started today</p>
           </div>
 
-          {/* Form */}
-          <form className="signup-form" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit}>
             
             {/* Name Field */}
-            <div className="form-group">
-              <label>Full Name</label>
-              <div className="input-wrapper">
-                <span className="input-icon">👤</span>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  👤
+                </span>
                 <input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className={`form-input ${validationErrors.name ? 'input-error' : ''}`}
+                  className={`w-full pl-10 pr-4 py-3 bg-slate-900 border ${validationErrors.name ? 'border-red-500' : 'border-slate-700'} rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                   disabled={loading}
                 />
               </div>
-              {validationErrors.name && <p className="field-error">{validationErrors.name}</p>}
+              {validationErrors.name && <p className="mt-1 text-xs text-red-500">{validationErrors.name}</p>}
             </div>
 
             {/* Email Field */}
-            <div className="form-group">
-              <label>Email Address</label>
-              <div className="input-wrapper">
-                <span className="input-icon">✉️</span>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  ✉️
+                </span>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@example.com"
-                  className={`form-input ${validationErrors.email ? 'input-error' : ''}`}
+                  className={`w-full pl-10 pr-4 py-3 bg-slate-900 border ${validationErrors.email ? 'border-red-500' : 'border-slate-700'} rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                   disabled={loading}
                 />
               </div>
-              {validationErrors.email && <p className="field-error">{validationErrors.email}</p>}
+              {validationErrors.email && <p className="mt-1 text-xs text-red-500">{validationErrors.email}</p>}
             </div>
 
             {/* Password Field */}
-            <div className="form-group">
-              <label>Password</label>
-              <div className="input-wrapper">
-                <span className="input-icon">🔒</span>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  🔒
+                </span>
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className={`form-input ${validationErrors.password ? 'input-error' : ''}`}
+                  className={`w-full pl-10 pr-12 py-3 bg-slate-900 border ${validationErrors.password ? 'border-red-500' : 'border-slate-700'} rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                   disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="toggle-password"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
                   disabled={loading}
                 >
                   {showPassword ? '👁️' : '👁️‍🗨️'}
                 </button>
               </div>
-              {validationErrors.password && <p className="field-error">{validationErrors.password}</p>}
+              {validationErrors.password && <p className="mt-1 text-xs text-red-500">{validationErrors.password}</p>}
             </div>
 
             {/* Confirm Password Field */}
-            <div className="form-group">
-              <label>Confirm Password</label>
-              <div className="input-wrapper">
-                <span className="input-icon">🔒</span>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">Confirm Password</label>
+              <div className="relative">
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                  🔒
+                </span>
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="••••••••"
-                  className={`form-input ${validationErrors.confirmPassword ? 'input-error' : ''}`}
+                  className={`w-full pl-10 pr-12 py-3 bg-slate-900 border ${validationErrors.confirmPassword ? 'border-red-500' : 'border-slate-700'} rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                   disabled={loading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="toggle-password"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white cursor-pointer"
                   disabled={loading}
                 >
                   {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
                 </button>
               </div>
-              {validationErrors.confirmPassword && <p className="field-error">{validationErrors.confirmPassword}</p>}
+              {validationErrors.confirmPassword && <p className="mt-1 text-xs text-red-500">{validationErrors.confirmPassword}</p>}
             </div>
 
             {/* General Server Error Message */}
             {error && (
-              <div className="error-message">
-                **Error:** {error}
+              <div className="p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm">
+                <strong>Error:</strong> {error}
               </div>
             )}
 
             {/* Terms Checkbox */}
-            <div className="checkbox-group">
-              <input
-                type="checkbox"
-                id="terms"
-                name="acceptTerms"
-                checked={formData.acceptTerms}
-                onChange={handleChange}
-                className="checkbox-input"
-                disabled={loading}
-              />
-              <label 
-                htmlFor="terms" 
-                className={`checkbox-label ${validationErrors.acceptTerms ? 'label-error' : ''}`}
-              >
-                I agree to the <span className="highlight">Terms & Conditions</span>
-              </label>
-              {validationErrors.acceptTerms && <p className="field-error checkbox-error">{validationErrors.acceptTerms}</p>}
+            <div className="flex items-start">
+              <div className="flex items-center h-5">
+                <input
+                    type="checkbox"
+                    id="terms"
+                    name="acceptTerms"
+                    checked={formData.acceptTerms}
+                    onChange={handleChange}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-600 rounded bg-slate-700"
+                    disabled={loading}
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label 
+                    htmlFor="terms" 
+                    className={`font-medium ${validationErrors.acceptTerms ? 'text-red-500' : 'text-slate-400'}`}
+                >
+                    I agree to the <span className="text-indigo-400">Terms & Conditions</span>
+                </label>
+                {validationErrors.acceptTerms && <p className="mt-1 text-xs text-red-500">{validationErrors.acceptTerms}</p>}
+              </div>
             </div>
 
             {/* Submit Button */}
             <button
-              type="submit" // Changed to type="submit" for better form handling
-              className="submit-btn"
-              // Disable button if loading or if any field has a validation error
+              type="submit" 
+              className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:-translate-y-0.5"
               disabled={loading || isFormInvalid} 
             >
               {loading ? 'Creating Account...' : 'Create Account →'}
             </button>
 
             {/* Login Link */}
-            <p className="login-link">
-              Already have an account? <Link to="/signin">Sign in</Link>
+            <p className="text-center text-slate-400 text-sm">
+              Already have an account? <Link to="/signin" className="text-indigo-400 hover:text-indigo-300 font-medium hover:underline">Sign in</Link>
             </p>
           </form>
 
           {/* Success Message */}
           {submitted && (
-            <div className="success-message">
+            <div className="mt-4 p-3 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 text-sm text-center">
               Account created successfully! 🎉 Redirecting to signin...
             </div>
           )}
         </div>
 
-        {/* Footer Text */}
-        <p className="footer-text">
-          We respect your privacy. Your data is secure with us.
-        </p>
+        <div className="px-8 py-4 bg-slate-900/50 text-center border-t border-slate-700">
+          <p className="text-xs text-slate-500">
+            We respect your privacy. Your data is secure with us.
+          </p>
+        </div>
       </div>
     </div>
   );
